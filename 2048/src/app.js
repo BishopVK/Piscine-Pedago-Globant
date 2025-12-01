@@ -1,23 +1,51 @@
 console.log("Wellcome to 2048!");
 
-// Seleccionar un div por su ID y cambiar su contenido
-/* const gameContainer = document.getElementById("cell1");
-gameContainer.innerHTML = "<h1>2</h1>"; */
+function initGame() {
+  const grid = document.querySelector("#grid-container");
+  grid.innerHTML = ""; // Vacía el grid al reiniciar
 
-// Dentro de grid-container genero 16 celdas con id "cell+n" y class "cell"
-// y les agrego un número aleatorio entre 2 y 4
+  for (let i = 1; i <= 16; i++) {
+    const cell = document.createElement("div");
+    cell.id = `cell + ${i}`;
+    cell.className = "cell";
+    cell.innerHTML = ""; // Vacía la celda inicialmente
 
-for (let i = 1; i <= 16; i++) {
-  const cell = document.createElement("div");
-  cell.id = "cell" + i;
-  cell.className = "cell";
-  const randomNumber = Math.random() < 0.5 ? 2 : 4;
-  cell.innerHTML = "<h1>" + randomNumber + "</h1>";
-  document.querySelector("#grid-container").appendChild(cell);
+    grid.appendChild(cell);
+  }
+
+  fillStartingCells();
 }
 
-// Agregar un evento de clic a un botón
+// Ejecutar el juego al cargar la página
+initGame();
+
+export function fillStartingCells() {
+  for (let i = 1; i <= 2; i++) {
+    let firstCell = Math.random() * 16 + 1;
+
+    while (firstCell === Math.random() * 16 + 1) {
+      let secondCell = Math.random() * 16 + 1;
+    }
+
+    const cell = document.querySelector(`#cell${firstCell}`);
+    cell.innerHTML = `<h1>${generateRandomValue()}</h1>`;
+  }
+  while (firstCell === Math.random() * 16 + 1) {
+    secondCell = Math.random() * 16 + 1;
+  }
+  for (let i = 1; i <= 2; i++) {
+    const cell = document.querySelector(`#cell${i}`);
+    cell.innerHTML = firstCell;
+  }
+}
+
+export function generateRandomValue() {
+  return Math.random() < 0.9 ? 2 : 4; // 90% de probabilidad de 2, 10% de 4
+  //cell.innerHTML = `<h1>${randomNumber}</h1>`;
+}
+
+// Evento del botón restart
 const startButton = document.getElementById("restart-button");
 startButton.addEventListener("click", function () {
-  alert("Game restarted!");
+  initGame();
 });
