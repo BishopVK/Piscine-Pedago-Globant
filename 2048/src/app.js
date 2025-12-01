@@ -108,15 +108,22 @@ function moveUp(move) {
     console.log("celsValues:", celsValues); // DB
     
     // Al haber pulsado arriba la comprobación se hace de abajo a arriba, hay que voltear el array
-    celsValues = celsValues.reverse();
-    console.log("reversed:", celsValues);  // DB
+    /* if (move === "up") {
+      celsValues = celsValues.reverse();
+      console.log("reversed:", celsValues);  // DB
+    } */
 
     // Crear array nuevo según la tecla pulsada
     const newArray = createNewArray(celsValues);
     console.log("newArray:", newArray); // DB
 
-    const finalArray = sumNumbers(newArray);
+    let finalArray = sumNumbers(newArray);
     console.log("finalArray:", finalArray); // DB
+
+    if (move === "down") {
+      finalArray = finalArray.reverse();
+      console.log("reversed:", finalArray);  // DB
+    }
 
     for (let i = 0; i < 4; i++) {
       let cell = document.querySelector("#cell" + colIdx[i]);
@@ -161,8 +168,8 @@ function sumNumbers(newArray) {
       secondNbr = newArray[i + 1];
 
     if (firstNbr === secondNbr) {
-      newArray[i + 1] = 0;
       finalArray.push(firstNbr * 2);
+      newArray[i + 1] = 0;
     }
     else {
       finalArray.push(firstNbr);
