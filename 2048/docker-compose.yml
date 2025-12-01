@@ -1,0 +1,13 @@
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80" # Cambia el puerto si es necesario
+    volumes:
+      - ./src:/usr/share/nginx/html
+    stdin_open: true
+    tty: true
+    restart: always
