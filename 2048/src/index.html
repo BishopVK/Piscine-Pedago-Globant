@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+
     <div id="game-container">
       <h1>2048 Game</h1>
       <div id="text-container">
@@ -23,6 +24,20 @@
       </div>
       <button id="restart-button">Restart Game</button>
     </div>
+
+    <!-- MODAL -->
+     <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close-modal">&times;</span>
+            <h2 id="modal-title">Has ganado</h2>
+            <div id="modal-score-container">
+              <p id="modal-text">Tu resultaldo ha sido:</p>
+              <p id="modal-score">0</p>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="app.js"></script>
+
   </body>
 </html>

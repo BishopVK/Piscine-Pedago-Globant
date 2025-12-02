@@ -2,10 +2,11 @@ import { move } from "./modules/moving.js";
 import { cellColour } from "./modules/grid.js";
 import { resetScore } from "./modules/scores.js";
 import { updateBestScore } from "./modules/scores.js";
+import { modal } from "./modules/events.js";
 
 console.log("Wellcome to 2048!");
 
-function initGame() {
+export function initGame() {
   const grid = document.querySelector("#grid-container");
   grid.innerHTML = ""; // Vacía el grid al reiniciar
 

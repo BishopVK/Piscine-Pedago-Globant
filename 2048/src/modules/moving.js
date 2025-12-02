@@ -31,11 +31,16 @@ export function move(direction) {
   copyMatrix = rotateMatrix(copyMatrix, getOppositeDirection(direction));
   console.log("finalMatrix after rotate back:", copyMatrix); // DB
 
+  // Check if player win
+  const isWin = checkWin(copyMatrix);
+
   // Check if there was any change
   if (JSON.stringify(originalMatrix) !== JSON.stringify(copyMatrix)) {
     shakeGridContainer(direction); // DB
     // If there was a change, add a new random number to the grid
-    const newCell = addRandomNumberToMatrix(copyMatrix);
+    let newCell;
+    if (!isWin)
+      newCell = addRandomNumberToMatrix(copyMatrix);
     // Update the grid with the final matrix
     updateGridFromMatrix(copyMatrix);
 
@@ -50,6 +55,19 @@ export function move(direction) {
   } else {
     console.log("No change in the matrix, no new number added.");
   }
+}
+
+export function checkWin(matrix) {
+  const N = matrix.length;
+
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N; j++) {
+      if (matrix[i][j] === 2048)
+        return true;
+    }
+  }
+
+  return false;
 }
 
 function shakeGridContainer(direction) {
