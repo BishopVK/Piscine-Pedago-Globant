@@ -1,13 +1,22 @@
+import { modal } from "./events.js";
+
 export function updateGridFromMatrix(matrix) {
-  for (let row = 0; row < 4; row++) {
-	for (let col = 0; col < 4; col++) {
-	  const cellIndex = row * 4 + col + 1; // Celdas van de 1 a 16
-	  const cell = document.querySelector("#cell" + cellIndex);
-	  const cellValue = matrix[row][col];
-	  cell.innerHTML = cellValue === 0 ? "" : cellValue;
-	  cellColour(cell);
+	let win = false;
+	for (let row = 0; row < 4; row++) {
+		for (let col = 0; col < 4; col++) {
+		const cellIndex = row * 4 + col + 1; // Celdas van de 1 a 16
+		const cell = document.querySelector("#cell" + cellIndex);
+		const cellValue = matrix[row][col];
+		if (cellValue === 2048)
+			win = true;
+		cell.innerHTML = cellValue === 0 ? "" : cellValue;
+		cellColour(cell);
+		}
 	}
-  }
+
+	if (win)
+		modal("win");
+
 }
 
 export function cellColour(cell) {

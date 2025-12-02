@@ -20,11 +20,11 @@ export function addRandomNumberToMatrix(matrix) {
 
 	// Find all empty cells
 	for (let i = 0; i < N; i++) {
-	for (let j = 0; j < N; j++) {
-		if (matrix[i][j] === 0) {
-		emptyCells.push({ row: i, col: j });
+		for (let j = 0; j < N; j++) {
+			if (matrix[i][j] === 0) {
+			emptyCells.push({ row: i, col: j });
+			}
 		}
-	}
 	}
 
 	// If there are no empty cells, return
