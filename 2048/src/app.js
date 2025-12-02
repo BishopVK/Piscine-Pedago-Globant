@@ -1,5 +1,7 @@
 import { move } from "./modules/moving.js";
 import { cellColour } from "./modules/grid.js";
+import { resetScore } from "./modules/scores.js";
+import { updateBestScore } from "./modules/scores.js";
 
 console.log("Wellcome to 2048!");
 
@@ -22,6 +24,7 @@ function initGame() {
 // Ejecutar el juego al cargar la página
 captureKeysEvent();
 restartButton();
+updateBestScore(0);
 initGame();
 
 function fillStartingCells() {
@@ -53,6 +56,7 @@ function generateRandomValue() {
 function restartButton() {
   const startButton = document.getElementById("restart-button");
   startButton.addEventListener("click", function () {
+    resetScore();
     initGame();
   });
 }

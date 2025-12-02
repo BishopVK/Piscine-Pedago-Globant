@@ -45,7 +45,7 @@ export function move(direction) {
       const cell = document.getElementById("cell" + index);
       cell.classList.add("spawn");
 
-      setTimeout(() => cell.classList.remove("spawn"), 200);
+      setTimeout(() => cell.classList.remove("spawn"), 400);
     }
   } else {
     console.log("No change in the matrix, no new number added.");
