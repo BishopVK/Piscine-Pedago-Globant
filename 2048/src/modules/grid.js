@@ -11,47 +11,48 @@ export function updateGridFromMatrix(matrix) {
 }
 
 export function cellColour(cell) {
-  if (cell.innerHTML.trim() === "")
-    return;
+	cell.className = ''; // Eliminar los estilos actuales
 
-  cell.className = ''; // Eliminar los estilos actuales
-  //cell.classList.remove();
-
-  switch (cell.innerHTML) {
-	case "2":
-	  cell.classList.add("cell", "num2");
-	  break;
-	case "4":
-	  cell.classList.add("cell", "num4");
-	  break;
-	case "8":
-	  cell.classList.add("cell", "num8");
-	  break;
-	case "16":
-	  cell.classList.add("cell", "num16");
-	  break;
-	case "32":
-	  cell.classList.add("cell", "num32");
-	  break;
-	case "64":
-	  cell.classList.add("cell", "num64");
-	  break;
-	case "128":
-	  cell.classList.add("cell", "num128");
-	  break;
-	case "256":
-	  cell.classList.add("cell", "num256");
-	  break;
-	case "512":
-	  cell.classList.add("cell", "num512");
-	  break;
-	case "1024":
-	  cell.classList.add("cell", "num1024");
-	  break;
-	case "2048":
-	  cell.classList.add("cell", "num2048");
-	  break;
-	default:
+	if (cell.innerHTML.trim() === "") {
 		cell.classList.add("cell");
-  }
+		return;
+	}
+
+	switch (cell.innerHTML) {
+		case "2":
+		cell.classList.add("cell", "num2");
+		break;
+		case "4":
+		cell.classList.add("cell", "num4");
+		break;
+		case "8":
+		cell.classList.add("cell", "num8");
+		break;
+		case "16":
+		cell.classList.add("cell", "num16");
+		break;
+		case "32":
+		cell.classList.add("cell", "num32");
+		break;
+		case "64":
+		cell.classList.add("cell", "num64");
+		break;
+		case "128":
+		cell.classList.add("cell", "num128");
+		break;
+		case "256":
+		cell.classList.add("cell", "num256");
+		break;
+		case "512":
+		cell.classList.add("cell", "num512");
+		break;
+		case "1024":
+		cell.classList.add("cell", "num1024");
+		break;
+		case "2048":
+		cell.classList.add("cell", "num2048");
+		break;
+		default:
+			cell.classList.add("cell");
+ 	}
 }

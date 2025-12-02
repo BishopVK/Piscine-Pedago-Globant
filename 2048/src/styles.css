@@ -11,6 +11,36 @@
   --cell-background-color: #f0f0f0;
   --cell-border-color: #ccc;
   --font-family: Arial, sans-serif;
+
+  /* Numbers GREEN: */
+  --cell-background-num2: #effef1;
+  --cell-background-num4: #dafedf;
+  --cell-background-num8: #b7fbc2;
+  --cell-background-num16: #7ff693;
+  --cell-background-num32: #5ceb74;
+  --cell-background-num64: #17d037;
+  --cell-background-num128: #0dac29;
+  --cell-background-num256: #0e8723;
+  --cell-background-num512: #116a21;
+  --cell-background-num1024: #10571e;
+  --cell-background-num2048: #02310d;
+  --cell-font-color2-64: #10571E;
+  --cell-font-color128-2048: #DAFEDF;
+
+  /* Numbers YELLOW: */
+  /* --cell-background-num2: #fcfcea;
+  --cell-background-num4: #faf8c7;
+  --cell-background-num8: #f5ee93;
+  --cell-background-num16: #efde52;
+  --cell-background-num32: #e9cc26;
+  --cell-background-num64: #d9b419;
+  --cell-background-num128: #bb8e13;
+  --cell-background-num256: #956713;
+  --cell-background-num512: #7c5117;
+  --cell-background-num1024: #6a4319;
+  --cell-background-num2048: #3d240b;
+  --cell-font-color2-64: #6A4319;
+  --cell-font-color128-2048: #FAF8C7; */
 }
 
 body {
@@ -93,47 +123,58 @@ body {
 }
 
 .num2 {
-  color: green;
+  color: var(--cell-font-color2-64);
+  background-color: var(--cell-background-num2);
 }
 
 .num4 {
-  color: blue;
+  color: var(--cell-font-color2-64);
+  background-color: var(--cell-background-num4);
 }
 
 .num8 {
-  color: red;
+  color: var(--cell-font-color2-64);
+  background-color: var(--cell-background-num8);
 }
 
 .num16 {
-  color: violet;
+  color: var(--cell-font-color2-64);
+  background-color: var(--cell-background-num16);
 }
 
 .num32 {
-  color: yellow;
+  color: var(--cell-font-color2-64);
+  background-color: var(--cell-background-num32);
 }
 
 .num64 {
-  color: orange;
+  color: var(--cell-font-color2-64);
+  background-color: var(--cell-background-num64);
 }
 
 .num128 {
-  color: brown;
+  color: var(--cell-font-color128-2048);
+  background-color: var(--cell-background-num128);
 }
 
 .num256 {
-  color: purple;
+  color: #FAF8C7;
+  background-color: var(--cell-background-num256);
 }
 
 .num512 {
-  color: pink;
+  color: #FAF8C7;
+  background-color: var(--cell-background-num512);
 }
 
 .num1024 {
-  color: gray;
+  color: #FAF8C7;
+  background-color: var(--cell-background-num1024);
 }
 
 .num2048 {
-  color: black;
+  color: #FAF8C7;
+  background-color: var(--cell-background-num2048);
 }
 
 /* Animation for shake effect */
