@@ -1,3 +1,5 @@
+import { updateScore } from "./scores.js";
+
 // Move numbers to the left in each row
 export function compressNumbers(copyMatrix) {
 	const N = copyMatrix.length;
@@ -46,11 +48,4 @@ export function sumNumbers(copyMatrix) {
 	}
 
 	return copyMatrix;
-}
-
-function updateScore(value) {
-  const scoreElement = document.getElementById("score-value");
-  let currentScore = parseInt(scoreElement.textContent);
-  currentScore += value;
-  scoreElement.textContent = currentScore;
 }

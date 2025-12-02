@@ -37,7 +37,16 @@ body {
   color: #776e65;
 }
 
-#score-container {
+#text-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+#score-container, #best-score-container {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
