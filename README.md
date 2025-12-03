@@ -20,8 +20,8 @@ mediante las flechas del teclado. Al moverlas:
     igual a la suma.
 -   Cada combinación incrementa la **puntuación**.
 
-El juego termina si: - No quedan movimientos disponibles (**Game
-Over**), o\
+El juego termina si:
+- No quedan movimientos disponibles (**GameOver**).
 - Se alcanza una ficha con valor **2048** (**Victoria**).
 
 Incluye un botón para **reiniciar la partida** en cualquier momento.
