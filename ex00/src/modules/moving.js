@@ -4,6 +4,7 @@ import { compressNumbers, sumNumbers } from "./mergeNumbers.js";
 import { updateGridFromMatrix } from "./grid.js";
 import { checkWin, checkLose } from "./endGame.js";
 import { modal } from "./events.js";
+import { transformCoordinates } from "./transformCoords.js";
 
 export function move(direction) {
   const originalMatrix = createMatrixFromGrid();
@@ -22,12 +23,19 @@ export function move(direction) {
   console.log("compressedMatrix:", copyMatrix); // DB
 
   // Sum numbers
-  copyMatrix = sumNumbers(copyMatrix);
+  const sumResult = sumNumbers(copyMatrix);
+  copyMatrix = sumResult.matrix;
+  const mergedCellsRotated = sumResult.mergedCells; // Coordenadas en sistema rotado
   console.log("summedMatrix:", copyMatrix); // DB
+  console.log("mergedCellsRotated:", mergedCellsRotated); // DB
 
   // Move nums to the left again
   copyMatrix = compressNumbers(copyMatrix);
   console.log("finalMatrix before rotate back:", copyMatrix); // DB
+
+  // TRANSFORMAR las coordenadas ANTES de rotar la matriz de vuelta
+  const mergedCellsOriginal = transformCoordinates(mergedCellsRotated, direction);
+  console.log("mergedCellsOriginal:", mergedCellsOriginal); // DB
 
   // Rotate back to original direction
   copyMatrix = rotateMatrix(copyMatrix, getOppositeDirection(direction));
@@ -39,10 +47,12 @@ export function move(direction) {
   // Check if there was any change
   if (JSON.stringify(originalMatrix) !== JSON.stringify(copyMatrix)) {
     shakeGridContainer(direction); // DB
+
     // If there was a change, add a new random number to the grid
     let newCell;
     if (!isWin)
       newCell = addRandomNumberToMatrix(copyMatrix);
+
     // Update the grid with the final matrix
     updateGridFromMatrix(copyMatrix);
 
@@ -53,6 +63,14 @@ export function move(direction) {
       cell.classList.add("spawn");
 
       setTimeout(() => cell.classList.remove("spawn"), 400);
+    }
+
+    // Efecto para las celdas que se fusionaron
+    for (const coord of mergedCellsOriginal) {
+      const index = coord.row * 4 + coord.col + 1;
+      const cell = document.getElementById("cell" + index);
+      cell.classList.add("merge"); // Nueva clase de animación
+      setTimeout(() => cell.classList.remove("merge"), 400);
     }
   } else {
     console.log("No change in the matrix, no new number added.");

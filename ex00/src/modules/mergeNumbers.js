@@ -26,8 +26,10 @@ export function compressNumbers(copyMatrix) {
 	return copyMatrix;
 }
 
+// Devuelve la matriz modificada Y las coordenadas donde ocurrieron las fusiones
 export function sumNumbers(copyMatrix) {
 	const N = copyMatrix.length;
+	const mergedCells = []; // Array para guardar las coordenadas de fusiones
 
 	for (let i = 0; i < N; i++) {
 		for (let j = 0; j < N - 1; j++) {
@@ -42,10 +44,14 @@ export function sumNumbers(copyMatrix) {
 				copyMatrix[i][j] = firstNbr * 2;
 				updateScore(firstNbr * 2);
 				copyMatrix[i][j + 1] = 0;
+
+				// Guardar la coordenada de la celda fusionada (en el sistema rotado)
+				mergedCells.push({ row: i, col: j });
+
 				j++; // Skip the next number since it has been merged
 			}
 		}
 	}
 
-	return copyMatrix;
+	return { matrix: copyMatrix, mergedCells };
 }
