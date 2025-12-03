@@ -2,7 +2,6 @@ import { move } from "./modules/moving.js";
 import { cellColour } from "./modules/grid.js";
 import { resetScore } from "./modules/scores.js";
 import { updateBestScore } from "./modules/scores.js";
-import { modal } from "./modules/events.js";
 
 console.log("Wellcome to 2048!");
 
