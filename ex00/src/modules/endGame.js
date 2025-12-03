@@ -16,13 +16,11 @@ export function checkLose(matrix) {
 
 	const gridIsFull = checkIfGridIsFull(matrix);
 
-	console.log("1"); // DB
 	if (!gridIsFull)
 		return false; // Aún hay huecos -> no ha perdido
 
 	const mergeItsPosible = checkMerge(matrix);
 
-	console.log("2"); // DB
 	if (mergeItsPosible)
 		return false; // puede fusionar -> no ha perdido
 
