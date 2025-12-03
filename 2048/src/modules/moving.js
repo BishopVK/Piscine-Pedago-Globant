@@ -2,6 +2,8 @@ import { createMatrixFromGrid, addRandomNumberToMatrix } from "./matrix.js";
 import { rotateMatrix, getOppositeDirection } from "./rotation.js";
 import { compressNumbers, sumNumbers } from "./mergeNumbers.js";
 import { updateGridFromMatrix } from "./grid.js";
+import { checkWin, checkLose } from "./endGame.js";
+import { modal } from "./events.js";
 
 export function move(direction) {
   const originalMatrix = createMatrixFromGrid();
@@ -55,19 +57,14 @@ export function move(direction) {
   } else {
     console.log("No change in the matrix, no new number added.");
   }
-}
 
-export function checkWin(matrix) {
-  const N = matrix.length;
+  // Check if player lose
+  const isLose = checkLose(copyMatrix);
 
-  for (let i = 0; i < N; i++) {
-    for (let j = 0; j < N; j++) {
-      if (matrix[i][j] === 2048)
-        return true;
-    }
+  if (isLose) {
+    console.log("entré en isLose if");
+    modal("lose");
   }
-
-  return false;
 }
 
 function shakeGridContainer(direction) {
