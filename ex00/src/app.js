@@ -3,7 +3,7 @@ import { resetScore } from "./modules/scores.js";
 import { updateBestScore } from "./modules/scores.js";
 import { enableControls } from "./modules/events.js"
 
-console.log("Wellcome to 2048!");
+//console.log("Wellcome to 2048!");
 
 export function initGame() {
   const grid = document.querySelector("#grid-container");

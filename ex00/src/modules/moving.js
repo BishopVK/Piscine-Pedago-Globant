@@ -8,38 +8,38 @@ import { transformCoordinates } from "./transformCoords.js";
 
 export function move(direction) {
   const originalMatrix = createMatrixFromGrid();
-  console.log("originalMatrix:", originalMatrix); // DB
+  // console.log("originalMatrix:", originalMatrix); // DB
 
   // Copy Matrix
   let copyMatrix = structuredClone(originalMatrix);
-  console.log("copyMatrix:", copyMatrix); // DB
+  // console.log("copyMatrix:", copyMatrix); // DB
 
   // Rotate copied Matrix
   copyMatrix = rotateMatrix(copyMatrix, direction);
-  console.log("rotatedMatrix:", copyMatrix); // DB
+  // console.log("rotatedMatrix:", copyMatrix); // DB
 
   // Move nums to the left
   copyMatrix = compressNumbers(copyMatrix);
-  console.log("compressedMatrix:", copyMatrix); // DB
+  // console.log("compressedMatrix:", copyMatrix); // DB
 
   // Sum numbers
   const sumResult = sumNumbers(copyMatrix);
   copyMatrix = sumResult.matrix;
   const mergedCellsRotated = sumResult.mergedCells; // Coordenadas en sistema rotado
-  console.log("summedMatrix:", copyMatrix); // DB
-  console.log("mergedCellsRotated:", mergedCellsRotated); // DB
+  // console.log("summedMatrix:", copyMatrix); // DB
+  // console.log("mergedCellsRotated:", mergedCellsRotated); // DB
 
   // Move nums to the left again
   copyMatrix = compressNumbers(copyMatrix);
-  console.log("finalMatrix before rotate back:", copyMatrix); // DB
+  // console.log("finalMatrix before rotate back:", copyMatrix); // DB
 
   // TRANSFORMAR las coordenadas ANTES de rotar la matriz de vuelta
   const mergedCellsOriginal = transformCoordinates(mergedCellsRotated, direction);
-  console.log("mergedCellsOriginal:", mergedCellsOriginal); // DB
+  // console.log("mergedCellsOriginal:", mergedCellsOriginal); // DB
 
   // Rotate back to original direction
   copyMatrix = rotateMatrix(copyMatrix, getOppositeDirection(direction));
-  console.log("finalMatrix after rotate back:", copyMatrix); // DB
+  // console.log("finalMatrix after rotate back:", copyMatrix); // DB
 
   // Check if player win
   const isWin = checkWin(copyMatrix);
@@ -73,14 +73,14 @@ export function move(direction) {
       setTimeout(() => cell.classList.remove("merge"), 400);
     }
   } else {
-    console.log("No change in the matrix, no new number added.");
+    console.log("No change in the matrix, no new number added."); // DB
   }
 
   // Check if player lose
   const isLose = checkLose(copyMatrix);
 
   if (isLose) {
-    console.log("entré en isLose if");
+    // console.log("entré en isLose if"); // DB
     modal("lose");
   }
 }
