@@ -1,9 +1,12 @@
 import { resetScore } from "./scores.js";
 import { initGame } from "../app.js";
-
+import { move } from "./moving.js";
 
 export function modal(mode) {
 	console.log("Llamada a la modal..."); // DB
+
+	// Evitar que el jugador siga jugando
+	disableControls();
 
 	const modalDiv = document.getElementById("modal");
 	if (!modalDiv) {
@@ -35,6 +38,7 @@ export function modal(mode) {
 		modalDiv.style.display = "none";
 		resetScore();
 		initGame();
+		enableControls(); // Vuelve a funcionar el teclado
 	}
 	
 	// Cuando el usuario hace clic en cualquier parte fuera de la modal, la cerramos
@@ -44,6 +48,34 @@ export function modal(mode) {
 			modalDiv.style.display = "none";
 			resetScore();
 			initGame();
+			enableControls(); // Vuelve a funcionar el teclado
 		}
 	}
+}
+
+export function enableControls() {
+document.addEventListener("keydown", handleKeyEvents);
+}
+
+export function disableControls() {
+document.removeEventListener("keydown", handleKeyEvents);
+}
+
+function handleKeyEvents(event) {
+if (event.key === "w" || event.key === "ArrowUp") {
+	event.preventDefault();
+	move("up");
+}
+else if (event.key === "s" || event.key === "ArrowDown") {
+	event.preventDefault();
+	move("down");
+}
+else if (event.key === "a" || event.key === "ArrowLeft") {
+	event.preventDefault();
+	move("left");
+}
+else if (event.key === "d" || event.key === "ArrowRight") {
+	event.preventDefault();
+	move("right");
+}
 }

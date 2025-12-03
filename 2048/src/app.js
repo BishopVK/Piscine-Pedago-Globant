@@ -1,7 +1,7 @@
-import { move } from "./modules/moving.js";
 import { cellColour } from "./modules/grid.js";
 import { resetScore } from "./modules/scores.js";
 import { updateBestScore } from "./modules/scores.js";
+import { enableControls } from "./modules/events.js"
 
 console.log("Wellcome to 2048!");
 
@@ -62,26 +62,5 @@ function restartButton() {
 }
 
 function captureKeysEvent() {
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "w" || event.key === "ArrowUp") {
-      event.preventDefault();
-      console.log("Movimiento hacia arriba");
-      move("up");
-    }
-    else if (event.key === "s" || event.key === "ArrowDown") {
-      event.preventDefault();
-      console.log("Movimiento hacia abajo");
-      move("down");
-    }
-    else if (event.key === "a" || event.key === "ArrowLeft") {
-      event.preventDefault();
-      console.log("Movimiento hacia la izquierda");
-      move("left");
-    }
-    else if (event.key === "d" || event.key === "ArrowRight") {
-      event.preventDefault();
-      console.log("Movimiento hacia la derecha");
-      move("right");
-    }
-  });
+  enableControls();
 }
