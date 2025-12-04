@@ -30,4 +30,4 @@ stop:
 
 re: fclean all
 
-.PHONY: all down up clean fclean re
+.PHONY: all down up restart clean fclean stop re
