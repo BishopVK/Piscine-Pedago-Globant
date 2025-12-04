@@ -109,13 +109,42 @@ APP_PORT=3000
 
 # 3. CONFIGURACIÓN INICIAL BACKEND
 
-## 3.1. Dockerfile frontend
+## 3.1. Crear package.json
+``` bash
+npm init -y
+```
+
+## 3.2. Actualizar package.json
+
+### 3.2.1. Añadir ES Modules
+``` json
+"type": "module",
+```
+
+### 3.2.3. Añadir Scripts recomendados
+``` json
+"scripts": {
+  "start": "node src/index.js",
+  "dev": "node --watch src/index.js"
+}
+```
+*--watch -> Usa el propio Nodemon de Node +22 para actualizar a tiempo real la aplicación*
+
+## 3.3. Instalar Express y CORS
+``` bash
+npm install express cors
+```
+
+## 3.4. (Opcional) Instalar Nodemon
+``` bash
+npm install -D nodemon
+```
 
 # 4. DOCKER
 
 ## 4.1. Dockerfile frontend
 ``` dockerfile
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 COPY package*.json ./
@@ -128,14 +157,14 @@ CMD ["npm", "run", "dev", "--", "--host"]
 
 ## 4.2. Dockerfile backend
 ``` dockerfile
-FROM node:18-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
 
-# Instalamos nodemon global para auto-reload
-RUN npm install -g nodemon
+# (Opcional) Instalamos nodemon global para auto-reload
+# RUN npm install -g nodemon
 
 EXPOSE 3000
 
@@ -145,8 +174,6 @@ CMD ["npm", "run", "dev"]
 
 ## 4.3. Docker-compose.yml
 ``` dockerfile
-version: "3.8"
-
 services:
   backend:
     build:
@@ -196,3 +223,7 @@ UNSPLASH_CLIENT_ID=QPEbY3rdBYt6Qnnru50FPtjDwYnZagm5xNHZWRLblsc
 UNSPLASH_CLIENT_SECRET=SKwi_zDFLtrnpL9UouphD1Qg2RUZP6oV1UyPsJUswqQ
 ```
 
+## 4.5. Levantar contenedores Docker
+``` bash
+docker compose -f docker-compose.yml up --build
+```
