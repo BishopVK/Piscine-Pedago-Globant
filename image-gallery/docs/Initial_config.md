@@ -219,8 +219,8 @@ networks:
 
 ## 4.4. .env en root
 ``` bash
-UNSPLASH_CLIENT_ID=QPEbY3rdBYt6Qnnru50FPtjDwYnZagm5xNHZWRLblsc
-UNSPLASH_CLIENT_SECRET=SKwi_zDFLtrnpL9UouphD1Qg2RUZP6oV1UyPsJUswqQ
+UNSPLASH_CLIENT_ID=abc123DEF
+UNSPLASH_CLIENT_SECRET=verySecretValue123
 ```
 
 ## 4.5. Levantar contenedores Docker

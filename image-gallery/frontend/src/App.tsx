@@ -23,7 +23,7 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           SUMAR
         </button>
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => setCount((count) => count - 1)}>
           RESTAR
         </button>
         <p>
