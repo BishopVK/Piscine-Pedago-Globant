@@ -10,3 +10,6 @@ export async function getPhotos(query?: string) {
   const res = await fetch(url);
   return res.json();
 }
+
+  // Aquí irán las funciones para hablar con la API de Unsplash
+/* export const placeholder = true; */
