@@ -20,7 +20,7 @@ Esto hace el proyecto 100% portable: cualquier persona con Docker y Docker Compo
 
 ---
 
-# 3. ESTRUCTURA DEL PROYECTO (idéntica a la anterior)
+# 3. ESTRUCTURA DEL PROYECTO
 
 ``` bash
 image-gallery/
@@ -68,7 +68,7 @@ COPY package*.json ./
 RUN npm ci --silent
 
 # (opcional) instalar nodemon global si lo prefieres
-RUN npm install -g nodemon --silent
+# RUN npm install -g nodemon --silent
 
 COPY . .
 
@@ -80,8 +80,6 @@ CMD ["npm","run","dev"]
 ## 4.3 docker-compose.yml (FULL-DOCKER)
 
 ```yaml
-version: '3.8'
-
 services:
   backend:
     build:
@@ -141,17 +139,13 @@ COMPOSE = docker compose -f docker-compose.yml
 
 all: build up
 
-init: all
-	$(COMPOSE) exec frontend npm install axios
-	$(COMPOSE) exec backend npm install axios
-	$(COMPOSE) exec backend npm install express
-	$(COMPOSE) exec backend npm install dotenv
+init-frontend:
+	$(COMPOSE) exec frontend npm install
 
-frontend-install:
-	$(COMPOSE) exec frontend npm install $(pkg)
+init-backend:
+	$(COMPOSE) exec backend npm install
 
-backend-install:
-	$(COMPOSE) exec backend npm install $(pkg)
+init: init-frontend init-backend
 
 build:
 	$(COMPOSE) build --no-cache
@@ -212,9 +206,14 @@ make logs
 ```bash
 # Instala una dependencia en frontend
 docker compose exec frontend npm install axios
+docker compose exec frontend npm install -D tailwindcss @tailwindcss/vite
 
 # Instala una dependencia en backend
-docker compose exec backend npm install express dotenv
+docker compose exec backend npm install axios express dotenv
+docker compose exec backend npm install -D typescript ts-node @types/node @types/express
+
+# Crear tsconfig.json
+docker compose exec backend npx tsc --init
 ```
 
 > Alternativa (reconstruir imagen con nueva dependencia):
@@ -231,9 +230,9 @@ docker compose exec backend npm install express dotenv
 
 ---
 
-# 7. BACKEND: ejemplo mínimo (sin cambios funcionales)
+# 7. BACKEND: ejemplo mínimo
 
-Mantén `backend/src/index.js` como antes, por ejemplo:
+Ejemplo de `backend/src/index.ts`:
 
 ```js
 import express from "express";

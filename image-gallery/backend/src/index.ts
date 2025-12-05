@@ -10,8 +10,12 @@ const PORT = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Endpoint mínimo para que puedas comprobar que funciona
+// Endpoint mínimo para poder comprobar que funciona
 app.get("/", (req, res) => {
+  res.json({ message: "Backend funcionando correctamente 🚀" });
+});
+
+app.get("/photos", (req, res) => {
   res.json({ message: "Backend funcionando correctamente 🚀" });
 });
 
