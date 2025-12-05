@@ -1,36 +1,42 @@
-PROJECT_NAME = image-gallery
 COMPOSE = docker compose -f docker-compose.yml
 
 all: build up
 
+init-frontend:
+	$(COMPOSE) exec frontend npm install
+
+init-backend:
+	$(COMPOSE) exec backend npm install
+
+init: init-frontend init-backend
+
 build:
-	$(COMPOSE) build
+	$(COMPOSE) build --no-cache
 
 up:
 	$(COMPOSE) up -d
 
-down:
-	$(COMPOSE) down
+logs:
+	$(COMPOSE) logs -f
 
-restart:
-	$(COMPOSE) restart
+ps:
+	$(COMPOSE) ps
 
-clean:
-	$(COMPOSE) down -v --remove-orphans
+exec-frontend:
+	$(COMPOSE) exec frontend sh
 
-fclean: clean
-# Elimina solo imágenes del proyecto
-	docker images "$(PROJECT_NAME)*" -q | xargs -r docker rmi
-
-# Elimina solo contenedores del proyecto
-	docker ps -a --filter "name=$(PROJECT_NAME)" -q | xargs -r docker rm -f
-
-# Elimina solo redes del proyecto
-	docker network ls --filter "name=$(PROJECT_NAME)" -q | xargs -r docker network rm
+exec-backend:
+	$(COMPOSE) exec backend sh
 
 stop:
 	$(COMPOSE) stop
 
-re: fclean all
+down:
+	$(COMPOSE) down
 
-.PHONY: all build up down restart clean fclean stop re
+clean:
+	$(COMPOSE) down -v --remove-orphans
+
+re: clean all
+
+.PHONY: all build up logs ps exec-frontend exec-backend stop down clean re

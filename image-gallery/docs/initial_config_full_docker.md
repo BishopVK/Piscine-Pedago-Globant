@@ -128,9 +128,9 @@ networks:
 ```
 
 **Notas importantes en compose:**
-- `- ./frontend:/app:cached` y `- ./backend:/app:cached` usan la opción `cached` para macOS/ Docker Desktop; mejora la velocidad de lectura. Puedes quitar `:cached` si da problemas.
+- `- ./frontend:/app:cached` y `- ./backend:/app:cached` usan la opción `cached` para macOS/ Docker Desktop; mejora la velocidad de lectura. Se puede quitar `:cached` si da problemas.
 - `/app/node_modules` es un **volumen anónimo**: las dependencias quedarán dentro del contenedor y no en el host.
-- `CHOKIDAR_USEPOLLING=true` mejora la detección de cambios en entornos con FS montados (útil para Vite / nodemon).
+- `CHOKIDAR_USEPOLLING=true` mejora la detección de cambios en entornos con FS (File System) montados (útil para Vite / nodemon).
 
 ---
 
@@ -140,6 +140,18 @@ networks:
 COMPOSE = docker compose -f docker-compose.yml
 
 all: build up
+
+init: all
+	$(COMPOSE) exec frontend npm install axios
+	$(COMPOSE) exec backend npm install axios
+	$(COMPOSE) exec backend npm install express
+	$(COMPOSE) exec backend npm install dotenv
+
+frontend-install:
+	$(COMPOSE) exec frontend npm install $(pkg)
+
+backend-install:
+	$(COMPOSE) exec backend npm install $(pkg)
 
 build:
 	$(COMPOSE) build --no-cache
@@ -172,10 +184,6 @@ re: clean all
 
 .PHONY: all build up logs ps exec-frontend exec-backend stop down clean re
 ```
-
-**Por qué es seguro:**
-- `clean` solo baja el stack y borra volúmenes del proyecto. No hace `docker system prune` global.
-- Para operaciones agresivas, usa `docker system prune` manualmente si lo deseas.
 
 ---
 
@@ -253,8 +261,14 @@ app.listen(PORT, () => {
 
 # 8. FRONTEND: dev con Vite
 - `package.json` debe contener script `dev` (Vite). `CMD` del Dockerfile lanza `npm run dev -- --host`.
-- Vite detectará cambios en `./frontend` y hará HMR (si se comporta bien en tu SO).
+- Vite detectará cambios en `./frontend` y hará HMR* (si se comporta bien en tu SO).
 - Si HMR falla, activa polling con `CHOKIDAR_USEPOLLING=true` (ya está en compose).
+
+**HMR: Hot Module Replacement*
+- Recargua un componente rápidamente
+- Sin refrescar toda la página
+- Sin perder el estado
+- Sin reiniciar Vite
 
 ---
 
@@ -265,13 +279,23 @@ app.listen(PORT, () => {
 ---
 
 # 10. Consejos finales / FAQ rápidas
-- Si ves EACCES otra vez: elimina los `node_modules` locales creados accidentalmente y vuelve a levantar con `make clean && make build && make up`.
+- Si ves EACCES: elimina los `node_modules` locales creados accidentalmente y vuelve a levantar con `make clean && make build && make up`.
 - Para obtener una shell con node y npm listos: `make exec-frontend`.
 - Para añadir dependencias: siempre usar `docker compose exec ... npm install`.
 
 ---
 
-# 11. Ejemplo de comandos frecuentes
+# 11. Comandos utilizados para inicializar la primera vez
+
+```bash
+# Primera vez
+make
+make init
+```
+
+---
+
+# 12. Ejemplo de comandos frecuentes
 
 ```bash
 # Primera vez
@@ -283,28 +307,8 @@ docker compose exec frontend npm install some-package
 
 # Reconstruir todo
 make clean
-make build
-make up
+make
 
 # Logs
 make logs
 ```
-
----
-
-# 12. Cambios que he aplicado respecto al Initial_config.md original
-- Dockerfiles actualizados a COPY package.json + npm ci + COPY . .
-- docker-compose con `/app/node_modules` como volumen anónimo + CHOKIDAR_USEPOLLING
-- Makefile adaptado a usage FULL-DOCKER y seguro (no prunes globales)
-- Flujo de trabajo y comandos para instalar dependencias desde contenedores
-
-
----
-
-Si quieres, puedo:
-- generar commits (patch) listos para aplicar en tu repo, o
-- crear un `scripts/dev-helpers.sh` con atajos (instalar deps, rebuild), o
-- ajustar los Dockerfiles para producción (multi-stage builds).
-
-Dime qué más quieres incluir y lo añado.
-
