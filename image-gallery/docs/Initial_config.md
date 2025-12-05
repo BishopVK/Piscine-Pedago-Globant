@@ -109,12 +109,12 @@ APP_PORT=3000
 
 # 3. CONFIGURACIÓN INICIAL BACKEND
 
-## 3.1. Crear package.json
+## 3.1. Crear *package.json*
 ``` bash
 npm init -y
 ```
 
-## 3.2. Actualizar package.json
+## 3.2. Actualizar *package.json*
 
 ### 3.2.1. Añadir ES Modules
 ``` json
@@ -130,18 +130,57 @@ npm init -y
 ```
 *--watch -> Usa el propio Nodemon de Node +22 para actualizar a tiempo real la aplicación*
 
-## 3.3. Instalar Express y CORS
+## 3.3. Instalar *Express* y *CORS*
 ``` bash
 npm install express cors
 ```
 
-## 3.4. (Opcional) Instalar Nodemon
+## 3.4. Instalar *axios*
+Para hacer las llamadas a Unsplash desde el backend. Por ejemplo:
+- *Intercambiar el code por el access_token*
+- *Enviar likes a /photos/:id/like*
+``` bash
+npm install axios
+```
+
+## 3.5. Instalar *dotenv*
+Necesario para cargar las claves del .env desde el backend. Por ejemplo:
+- *Sin dotenv, no puedes acceder a process.env.UNSPLASH_CLIENT_ID*
+``` bash
+npm install dotenv
+```
+
+## 3.6. Ejemplo de *backend/src/index.js*
+``` js
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.APP_PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+
+// Endpoint mínimo para que puedas comprobar que funciona
+app.get("/", (req, res) => {
+  res.json({ message: "Backend funcionando correctamente 🚀" });
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend escuchando en http://localhost:${PORT}`);
+});
+```
+
+## 3.7. (Opcional) Instalar *Nodemon*
 ``` bash
 npm install -D nodemon
 ```
 *Ya no es necesario desde Node +22*
 
-## 3.5. (Opcional) Instalar Nodemon
+# 4. MAKEFILE
 ``` Makefile
 all:
 	docker compose -f docker-compose.yml up --build
@@ -178,9 +217,46 @@ re: fclean all
 .PHONY: all down up clean fclean re
 ```
 
-# 4. DOCKER
+# 5 ESTRUCTURA DEL PROYECTO
 
-## 4.1. Dockerfile frontend
+## 5.1. Estructura inicial de frontend/src/
+``` bash
+src/
+├── App.css
+├── App.tsx
+├── assets/
+│   └── react.svg
+├── components/
+│   ├── Navbar.tsx
+│   ├── PhotoCard.tsx
+│   └── PhotoGrid.tsx
+├── context/
+│   └── AuthContext.tsx
+├── hooks/
+│   └── useUnsplash.ts
+├── index.css
+├── main.tsx
+├── pages/
+│   ├── Callback.tsx
+│   ├── Favorites.tsx
+│   └── Home.tsx
+└── services/
+    └── api.ts  ← Peticiones al backend
+```
+
+## 5.2. Estructura inicial de backend/src/
+``` bash
+src/
+├── index.js
+├── unsplash.js  ← Servicio para OAuth + likes + peticiones privadas
+└── routes/
+    ├── auth.js
+    └── photos.js
+```
+
+# 6. DOCKER
+
+## 6.1. Dockerfile frontend
 ``` dockerfile
 FROM node:22-alpine
 WORKDIR /app
@@ -193,7 +269,7 @@ EXPOSE 5173
 CMD ["npm", "run", "dev", "--", "--host"]
 ```
 
-## 4.2. Dockerfile backend
+## 6.2. Dockerfile backend
 ``` dockerfile
 FROM node:22-alpine
 WORKDIR /app
@@ -210,7 +286,7 @@ EXPOSE 3000
 CMD ["npm", "run", "dev"]
 ```
 
-## 4.3. Docker-compose.yml
+## 6.3. Docker-compose.yml
 ``` dockerfile
 services:
   backend:
@@ -255,13 +331,17 @@ networks:
     driver: bridge
 ```
 
-## 4.4. .env en root
+## 6.4. .env en root
 ``` bash
 UNSPLASH_CLIENT_ID=abc123DEF
 UNSPLASH_CLIENT_SECRET=verySecretValue123
 ```
 
-## 4.5. Levantar contenedores Docker
+## 6.5. Levantar contenedores Docker
 ``` bash
 docker compose -f docker-compose.yml up --build
+```
+o
+``` bash
+make
 ```
