@@ -1,33 +1,36 @@
-all:
-	docker compose -f docker-compose.yml up --build
+PROJECT_NAME = image-gallery
+COMPOSE = docker compose -f docker-compose.yml
 
-down:
-	docker compose -f docker-compose.yml down
+all: build up
+
+build:
+	$(COMPOSE) build
 
 up:
-	docker compose -f docker-compose.yml up -d
+	$(COMPOSE) up -d
+
+down:
+	$(COMPOSE) down
 
 restart:
-	docker compose -f docker-compose.yml restart
+	$(COMPOSE) restart
 
 clean:
-	docker compose -f docker-compose.yml down -v
+	$(COMPOSE) down -v --remove-orphans
 
 fclean: clean
-	docker compose -f docker-compose.yml rm -f
-	docker rmi $$(docker images -f "dangling=true" -q)
-	docker system prune -f
-	docker volume prune -f
-	docker network prune -f
-	docker image prune -f
-	docker builder prune -f
-	docker container prune -f
-	docker compose -f docker-compose.yml build --no-cache
-	docker compose -f docker-compose.yml up --build -d
+# Elimina solo imágenes del proyecto
+	docker images "$(PROJECT_NAME)*" -q | xargs -r docker rmi
+
+# Elimina solo contenedores del proyecto
+	docker ps -a --filter "name=$(PROJECT_NAME)" -q | xargs -r docker rm -f
+
+# Elimina solo redes del proyecto
+	docker network ls --filter "name=$(PROJECT_NAME)" -q | xargs -r docker network rm
 
 stop:
-	docker compose -f docker-compose.yml stop
+	$(COMPOSE) stop
 
 re: fclean all
 
-.PHONY: all down up restart clean fclean stop re
+.PHONY: all build up down restart clean fclean stop re
