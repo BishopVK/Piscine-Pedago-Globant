@@ -1,3 +1,8 @@
+import dotenv from "dotenv";
+
+// Cargar variables de entorno (.env)
+dotenv.config();
+
 const BASE_URL = "https://api.unsplash.com";
 
 export async function getPhotos(query?: string) {

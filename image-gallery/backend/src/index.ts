@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 // Cargar variables de entorno (.env)
 dotenv.config();
@@ -12,6 +13,9 @@ const PORT = process.env.APP_PORT || 3000;
 // Permite que el frontend (puerto 5173) llame al backend (puerto 3000).
 //app.use(cors());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }))
+
+// Inicializar middleware para parsear cookies
+app.use(cookieParser());
 
 // Permite recibir datos en formato JSON
 app.use(express.json());

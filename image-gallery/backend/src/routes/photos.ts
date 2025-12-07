@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
 
 // GET /search/photos -> Buscar fotos por palabra clave
 // Permitir que el frontend busque fotos por keyword
-router.get("/search/photos", async (req, res) => {
+router.get("/search", async (req, res) => {
   try {
     const query = req.query.query as string;
     if (!query) {
@@ -105,7 +105,7 @@ router.get("/search/photos", async (req, res) => {
 
 // GET /photos/:id -> Obtener foto por ID
 // Permitir que el frontend obtenga una foto específica por su ID
-router.get("/photos/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id as string;
     if (!id) {

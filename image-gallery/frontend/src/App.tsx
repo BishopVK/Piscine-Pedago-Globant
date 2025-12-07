@@ -1,4 +1,4 @@
-import { useState } from 'react'
+/* import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -39,6 +39,22 @@ function App() {
       </h1>
     </>
   )
+} */
+
+  import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
+import { AuthProvider } from "./context/AuthContext";
+
+function App() {
+  const path = window.location.pathname;
+
+  return (
+    <AuthProvider>
+      <Navbar />
+      {path === "/favorites" ? <Favorites /> : <Home />}
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

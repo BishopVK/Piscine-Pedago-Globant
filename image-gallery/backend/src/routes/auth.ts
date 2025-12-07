@@ -67,4 +67,17 @@ router.get("/callback", async (req, res) => {
 
 });
 
+router.get("/check", (req, res) => {
+  if (!req.cookies.access_token) {
+    return res.status(401).send({
+      ok: false,
+      authenticated: false
+    });
+  }
+  res.status(200).send({
+    ok: true,
+    authenticated: true
+  });
+});
+
 export default router;
