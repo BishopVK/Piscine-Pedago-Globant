@@ -31,7 +31,7 @@ import photoRoutes from "./routes/photos.ts";
 
 // Usar rutas
 app.use("/auth", authRoutes);
-app.use("/", photoRoutes);
+app.use("/photos", photoRoutes);
 
 // Manejo de rutas no encontradas
 app.use((req: express.Request, res: express.Response) => {
