@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import PhotoModal from "../components/PhotoModal";
 
 export default function Favorites() {
   const [photos, setPhotos] = useState<any[]>([]);
+  const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Cargar favoritos del localStorage
@@ -22,6 +25,21 @@ export default function Favorites() {
     // Actualizar lista de IDs de favoritos
     const favoriteIds = updatedPhotos.map(p => p.id);
     localStorage.setItem("favorites", JSON.stringify(favoriteIds));
+
+    // Cerrar modal si estamos viendo la foto que se eliminó
+    if (selectedPhoto?.id === id) {
+      closePhotoModal();
+    }
+  };
+
+  const openPhotoModal = (photo: any) => {
+    setSelectedPhoto(photo);
+    setIsModalOpen(true);
+  };
+
+  const closePhotoModal = () => {
+    setIsModalOpen(false);
+    setSelectedPhoto(null);
   };
 
   return (
@@ -62,7 +80,9 @@ export default function Favorites() {
               <div
                 key={photo.id}
                 className="relative group overflow-hidden rounded-lg shadow-lg 
-                         hover:shadow-2xl transition-all duration-300 bg-gray-800"
+                         hover:shadow-2xl transition-all duration-300 bg-gray-800
+                         cursor-pointer"
+                onClick={() => openPhotoModal(photo)}
               >
                 {/* Imagen con aspect ratio cuadrado */}
                 <div className="w-full pb-[100%] relative">
@@ -78,7 +98,10 @@ export default function Favorites() {
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 
                               transition-all duration-300 flex items-center justify-center">
                   <button
-                    onClick={() => removeFavorite(photo.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFavorite(photo.id);
+                    }}
                     className="transform scale-0 group-hover:scale-100 
                              transition-transform duration-300
                              bg-red-600 hover:bg-red-700 text-white px-4 py-2 
@@ -88,10 +111,11 @@ export default function Favorites() {
                   </button>
                 </div>
 
-                {/* Info del autor en la parte inferior */}
+                {/* Info del autor en la parte inferior - OCULTO por defecto */}
                 <div className="absolute bottom-0 left-0 right-0 
                               bg-linear-to-t from-black/80 to-transparent p-3
-                              pointer-events-none">
+                              pointer-events-none opacity-0 group-hover:opacity-100
+                              transition-opacity duration-300">
                   <p className="text-white text-sm font-semibold truncate">
                     {photo.user?.name || "Unknown"}
                   </p>
@@ -101,6 +125,15 @@ export default function Favorites() {
           </div>
         )}
       </div>
+
+      {/* Modal para ver foto en grande */}
+      <PhotoModal
+        photo={selectedPhoto}
+        isOpen={isModalOpen}
+        onClose={closePhotoModal}
+        onToggleFavorite={(photo) => removeFavorite(photo.id)}
+        isFavorite={true}
+      />
     </div>
   );
 }

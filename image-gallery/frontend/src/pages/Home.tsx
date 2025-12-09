@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
+import PhotoModal from "../components/PhotoModal";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -7,6 +8,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Cargar favoritos del localStorage
   useEffect(() => {
@@ -72,6 +75,16 @@ export default function Home() {
 
   const isFavorite = (photoId: string) => favorites.includes(photoId);
 
+  const openPhotoModal = (photo: any) => {
+    setSelectedPhoto(photo);
+    setIsModalOpen(true);
+  };
+
+  const closePhotoModal = () => {
+    setIsModalOpen(false);
+    setSelectedPhoto(null);
+  };
+
   useEffect(() => {
     loadPhotos();
   }, []);
@@ -127,6 +140,7 @@ export default function Home() {
                 className="relative group overflow-hidden rounded-lg shadow-lg 
                          hover:shadow-2xl transition-all duration-300 
                          hover:scale-[1.02] cursor-pointer bg-gray-800"
+                onClick={() => openPhotoModal(photo)}
               >
                 {/* Imagen */}
                 <div className="w-full pb-[100%] relative">
@@ -148,7 +162,7 @@ export default function Home() {
                         e.stopPropagation();
                         toggleFavorite(photo);
                       }}
-                      className="opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-300
                                bg-black/50 hover:bg-black/70 rounded-full p-2
                                text-2xl leading-none"
                       title={isFavorite(photo.id) ? "Remove from favorites" : "Add to favorites"}
@@ -157,9 +171,8 @@ export default function Home() {
                     </button>
                   </div>
 
-                  {/* Información del autor */}
-                  <div className="transform translate-y-12 group-hover:translate-y-0 
-                                transition-transform duration-300">
+                  {/* Información del autor - OCULTO por defecto */}
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <p className="text-white font-semibold text-sm truncate">
                       {photo.user?.name || "Unknown"}
                     </p>
@@ -175,6 +188,15 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Modal para ver foto en grande */}
+      <PhotoModal
+        photo={selectedPhoto}
+        isOpen={isModalOpen}
+        onClose={closePhotoModal}
+        onToggleFavorite={toggleFavorite}
+        isFavorite={selectedPhoto ? isFavorite(selectedPhoto.id) : false}
+      />
     </div>
   );
 }
