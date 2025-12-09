@@ -55,7 +55,7 @@ export default function PhotoModal({
                       transition-all text-2xl"
             title={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
-            {isFavorite ? "⭐" : "☆"}
+            {isFavorite ? "★" : "☆"}
           </button>
         )}
 

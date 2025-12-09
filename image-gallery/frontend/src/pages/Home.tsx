@@ -138,7 +138,7 @@ export default function Home() {
               <div
                 key={photo.id}
                 className="relative group overflow-hidden rounded-lg shadow-lg 
-                         hover:shadow-2xl transition-all duration-300 
+                         hover:shadow-2xl transition-all duration-300 ease-in-out
                          hover:scale-[1.02] cursor-pointer bg-gray-800"
                 onClick={() => openPhotoModal(photo)}
               >
@@ -154,7 +154,7 @@ export default function Home() {
                 
                 {/* Overlay con información y botón de favorito */}
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 
-                              transition-all duration-300 flex flex-col justify-between p-3">
+                              transition-all duration-300 ease-in-out flex flex-col justify-between p-3">
                   {/* Botón de favorito en la esquina superior derecha */}
                   <div className="flex justify-end">
                     <button
@@ -162,12 +162,12 @@ export default function Home() {
                         e.stopPropagation();
                         toggleFavorite(photo);
                       }}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                               bg-black/50 hover:bg-black/70 rounded-full p-2
-                               text-2xl leading-none"
+                      className="opacity-0 group-hover:opacity-100 transition-all duration-300
+                                ease-in-out bg-black/50 hover:bg-black/70 rounded-full p-2
+                               text-2xl leading-none pb-3"
                       title={isFavorite(photo.id) ? "Remove from favorites" : "Add to favorites"}
                     >
-                      {isFavorite(photo.id) ? "⭐" : "☆"}
+                      {isFavorite(photo.id) ? "★" : "☆"}
                     </button>
                   </div>
 
