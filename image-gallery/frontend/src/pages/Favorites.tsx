@@ -1,17 +1,27 @@
 import { useEffect, useState } from "react";
 
 export default function Favorites() {
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState<any[]>([]);
 
   useEffect(() => {
-    const favs = JSON.parse(localStorage.getItem("favs") || "[]");
-    setPhotos(favs);
+    // Cargar favoritos del localStorage
+    const savedPhotos = localStorage.getItem("favoritesData");
+    if (savedPhotos) {
+      setPhotos(JSON.parse(savedPhotos));
+    }
   }, []);
 
   const removeFavorite = (id: string) => {
-    const updated = photos.filter((p: any) => p.id !== id);
-    setPhotos(updated);
-    localStorage.setItem("favs", JSON.stringify(updated));
+    // Actualizar lista de fotos
+    const updatedPhotos = photos.filter((p) => p.id !== id);
+    setPhotos(updatedPhotos);
+    
+    // Actualizar localStorage
+    localStorage.setItem("favoritesData", JSON.stringify(updatedPhotos));
+    
+    // Actualizar lista de IDs de favoritos
+    const favoriteIds = updatedPhotos.map(p => p.id);
+    localStorage.setItem("favorites", JSON.stringify(favoriteIds));
   };
 
   return (
@@ -47,23 +57,25 @@ export default function Favorites() {
             </a>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {photos.map((photo: any) => (
               <div
                 key={photo.id}
                 className="relative group overflow-hidden rounded-lg shadow-lg 
                          hover:shadow-2xl transition-all duration-300 bg-gray-800"
-                style={{ aspectRatio: '1/1' }}
               >
-                <img
-                  src={photo.urls.small}
-                  alt={photo.alt_description || "Favorite photo"}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {/* Imagen con aspect ratio cuadrado */}
+                <div className="w-full pb-[100%] relative">
+                  <img
+                    src={photo.urls.small}
+                    alt={photo.alt_description || "Favorite photo"}
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
 
                 {/* Overlay con botón de eliminar */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 
                               transition-all duration-300 flex items-center justify-center">
                   <button
                     onClick={() => removeFavorite(photo.id)}
@@ -76,9 +88,10 @@ export default function Favorites() {
                   </button>
                 </div>
 
-                {/* Info del autor */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t 
-                              from-black to-transparent p-3">
+                {/* Info del autor en la parte inferior */}
+                <div className="absolute bottom-0 left-0 right-0 
+                              bg-linear-to-t from-black/80 to-transparent p-3
+                              pointer-events-none">
                   <p className="text-white text-sm font-semibold truncate">
                     {photo.user?.name || "Unknown"}
                   </p>

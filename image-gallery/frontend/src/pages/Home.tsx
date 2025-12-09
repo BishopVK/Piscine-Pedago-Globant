@@ -6,6 +6,15 @@ export default function Home() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  // Cargar favoritos del localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("favorites");
+    if (saved) {
+      setFavorites(JSON.parse(saved));
+    }
+  }, []);
 
   const loadPhotos = async () => {
     try {
@@ -39,11 +48,29 @@ export default function Home() {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      search();
+  const toggleFavorite = (photo: any) => {
+    const photoId = photo.id;
+    let updatedFavorites: string[];
+    let updatedFavoritesData: any[];
+
+    if (favorites.includes(photoId)) {
+      // Remover de favoritos
+      updatedFavorites = favorites.filter(id => id !== photoId);
+      const savedPhotos = JSON.parse(localStorage.getItem("favoritesData") || "[]");
+      updatedFavoritesData = savedPhotos.filter((p: any) => p.id !== photoId);
+    } else {
+      // Añadir a favoritos
+      updatedFavorites = [...favorites, photoId];
+      const savedPhotos = JSON.parse(localStorage.getItem("favoritesData") || "[]");
+      updatedFavoritesData = [...savedPhotos, photo];
     }
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    localStorage.setItem("favoritesData", JSON.stringify(updatedFavoritesData));
   };
+
+  const isFavorite = (photoId: string) => favorites.includes(photoId);
 
   useEffect(() => {
     loadPhotos();
@@ -51,7 +78,7 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-gray-900 text-white">
-      {/* Search Section - Fixed width container */}
+      {/* Search Section */}
       <div className="w-full bg-gray-800 border-b border-gray-700 py-6 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row gap-3">
@@ -62,7 +89,7 @@ export default function Home() {
               placeholder="Search photos on Unsplash..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={(e) => e.key === "Enter" && search()}
             />
 
             <button
@@ -82,7 +109,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Photo Grid - Full width */}
+      {/* Photo Grid */}
       <div className="w-full px-4 py-6">
         {loading && photos.length === 0 ? (
           <div className="flex justify-center items-center h-64">
@@ -93,32 +120,51 @@ export default function Home() {
             <p className="text-gray-400 text-lg">No photos found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {photos.map((photo: any) => (
               <div
                 key={photo.id}
                 className="relative group overflow-hidden rounded-lg shadow-lg 
                          hover:shadow-2xl transition-all duration-300 
                          hover:scale-[1.02] cursor-pointer bg-gray-800"
-                style={{ aspectRatio: '1/1' }}
               >
-                <img
-                  src={photo.urls.small}
-                  alt={photo.alt_description || "Unsplash photo"}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {/* Imagen */}
+                <div className="w-full pb-[100%] relative">
+                  <img
+                    src={photo.urls.small}
+                    alt={photo.alt_description || "Unsplash photo"}
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
                 
-                {/* Overlay con información */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 
-                              transition-all duration-300 flex items-end p-4">
-                  <div className="transform translate-y-full group-hover:translate-y-0 
+                {/* Overlay con información y botón de favorito */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 
+                              transition-all duration-300 flex flex-col justify-between p-3">
+                  {/* Botón de favorito en la esquina superior derecha */}
+                  <div className="flex justify-end">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(photo);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out
+                               bg-black/50 hover:bg-black/70 rounded-full p-2
+                               text-2xl leading-none"
+                      title={isFavorite(photo.id) ? "Remove from favorites" : "Add to favorites"}
+                    >
+                      {isFavorite(photo.id) ? "⭐" : "☆"}
+                    </button>
+                  </div>
+
+                  {/* Información del autor */}
+                  <div className="transform translate-y-12 group-hover:translate-y-0 
                                 transition-transform duration-300">
                     <p className="text-white font-semibold text-sm truncate">
                       {photo.user?.name || "Unknown"}
                     </p>
                     {photo.alt_description && (
-                      <p className="text-gray-300 text-xs truncate">
+                      <p className="text-gray-300 text-xs truncate mt-1">
                         {photo.alt_description}
                       </p>
                     )}
