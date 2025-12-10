@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     // Hacer la solicitud a la API de Unsplash para obtener fotos
     const response = await axios.get("https://api.unsplash.com/photos", {
       params: {
-        per_page: 10,
+        per_page: 30,
       },
       headers: {
         Authorization: `Bearer ${access_cookie}`,
