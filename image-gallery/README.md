@@ -5,6 +5,10 @@ de alta calidad utilizando la **API de Unsplash**. Los usuarios pueden
 autenticarse mediante **OAuth 2.0** con su cuenta de Unsplash, y una vez
 logueados pueden marcar fotos como favoritas.
 
+<p align="center">
+<img width="1028px" alt="603px" src="./img/image_gallery.png">
+</p>
+
 ## 🚀 Tecnologías utilizadas
 
 ### Frontend
