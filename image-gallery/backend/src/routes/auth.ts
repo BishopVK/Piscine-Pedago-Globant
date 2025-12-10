@@ -80,4 +80,17 @@ router.get("/check", (req, res) => {
   });
 });
 
+router.post("/logout", (req, res) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  });
+
+  res.status(200).send({
+    ok: true,
+    message: "Logged out successfully"
+  });
+});
+
 export default router;
